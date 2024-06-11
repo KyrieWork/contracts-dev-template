@@ -1,0 +1,38 @@
+.DS_Store
+node_modules
+.env
+yarn-error.log
+
+#Hardhat files
+artifacts/
+artifacts-ref/
+hh-cache/
+hh-cache-ref/
+/cache
+/artifacts
+
+#foundry test compilation files
+cache_forge
+out
+reference-out
+optimized-out
+reference-working
+offerers-out
+
+#foundry script run output files
+broadcast/
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
+
+# VScode
+.vscode
+__pycache__

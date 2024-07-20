@@ -20,7 +20,7 @@ contract UpgradeScript is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        bytes memory upgradeData = abi.encodeWithSignature("upgradeToAndCall(address,bytes)", address(new Lock()), "");
+        bytes memory upgradeData = abi.encodeWithSignature("upgradeToAndCall(address,bytes)", address(new Lock(0)), "");
         (bool s, ) = address(target).call(upgradeData);
         require(s, "upgrade target failed");
 

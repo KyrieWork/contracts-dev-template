@@ -32,7 +32,7 @@
     "build": "hardhat compile && forge build",
     "clean": "rm -rf cache/ typechain-types/ out/",
     "rebuild": "yarn clean && forge build && source .env",
-    "node-localnet": "anvil",
+    "node-localnet": "anvil --chain-id 1337",
     "node-mainnet": "source .env && anvil --fork-url $ETH_RPC_URL",
     "node-testnet": "source .env && anvil --fork-url $ETH_TEST_RPC_URL"
   }

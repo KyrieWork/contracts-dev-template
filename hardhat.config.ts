@@ -1,17 +1,20 @@
-import { HardhatUserConfig, vars } from "hardhat/config";
+import { HardhatUserConfig } from "hardhat/config";
+import { Chains, Chains_API_Keys, Chains_Custom_List } from "./chains";
 import "@nomicfoundation/hardhat-toolbox";
 import "@nomicfoundation/hardhat-foundry";
 import "hardhat-contract-sizer";
 import "hardhat-abi-exporter";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-import { Chains, Chains_API_Keys, Chains_Custom_List } from "./chains";
+import "./tasks";
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
   solidity: {
     version: "0.8.25",
     settings: {
+      // evmVersion: "istanbul",
+      viaIR: true,
       optimizer: {
         enabled: true,
         runs: 200,
@@ -19,19 +22,14 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
+    localhost: {
+      url: "http://127.0.0.1:8545/",
+      chainId: 1337,
+    },
     hardhat: {
       allowUnlimitedContractSize: true,
     },
     ...Chains,
-  },
-  mocha: {
-    timeout: 300000,
-  },
-  gasReporter: {
-    enabled: true,
-    currency: "USD",
-    noColors: true,
-    outputFile: "./out/gasReporter.txt",
   },
   etherscan: {
     apiKey: {
@@ -44,6 +42,19 @@ const config: HardhatUserConfig = {
     tests: "./test",
     cache: "./cache/hardhat",
     artifacts: "./out/hardhat/artifacts",
+  },
+  mocha: {
+    timeout: 300000,
+  },
+  sourcify: {
+    // sourcify is a decentralized source code verification service.
+    enabled: false,
+  },
+  gasReporter: {
+    enabled: true,
+    currency: "USD",
+    noColors: true,
+    outputFile: "./out/gasReporter.txt",
   },
   contractSizer: {
     /// yarn run hardhat size-contracts

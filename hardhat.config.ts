@@ -1,21 +1,14 @@
 import { HardhatUserConfig, vars } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "@nomicfoundation/hardhat-foundry";
+import "hardhat-contract-sizer";
+import "hardhat-abi-exporter";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-
-/* # Hardhat set  */
-
-/* # Hardhat account */
-const SEPOLIA_PRIVATE_KEY = vars.get("SEPOLIA_PRIVATE_KEY");
-
-/* # Node RPC API keys */
-const INFURA_API_KEY = vars.get("INFURA_API_KEY");
-
-/* # Block explorer API keys */
-const ETHERSCAN_API_KEY = vars.get("ETHERSCAN_API_KEY");
+import { Chains, Chains_API_Keys, Chains_Custom_List } from "./chains";
 
 const config: HardhatUserConfig = {
+  defaultNetwork: "hardhat",
   solidity: {
     version: "0.8.25",
     settings: {
@@ -26,10 +19,10 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    sepolia: {
-      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
-      accounts: [SEPOLIA_PRIVATE_KEY],
+    hardhat: {
+      allowUnlimitedContractSize: true,
     },
+    ...Chains,
   },
   mocha: {
     timeout: 300000,
@@ -38,12 +31,35 @@ const config: HardhatUserConfig = {
     enabled: true,
     currency: "USD",
     noColors: true,
-    // outputFile: "./out/.gasReporter",
+    outputFile: "./out/gasReporter.txt",
   },
   etherscan: {
     apiKey: {
-      sepolia: ETHERSCAN_API_KEY,
+      ...Chains_API_Keys,
     },
+    customChains: Chains_Custom_List,
+  },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache/hardhat",
+    artifacts: "./out/hardhat/artifacts",
+  },
+  contractSizer: {
+    /// yarn run hardhat size-contracts
+    alphaSort: true,
+    disambiguatePaths: false,
+    runOnCompile: false,
+    strict: true,
+  },
+  abiExporter: {
+    /// yarn run hardhat export-abi | yarn run hardhat clear-abi
+    path: "./out/abi",
+    runOnCompile: true,
+    clear: true,
+    flat: false,
+    spacing: 2,
+    format: "minimal",
   },
 };
 

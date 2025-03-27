@@ -6,9 +6,10 @@ Try running some of the following tasks:
 
 ```shell
 npx hardhat help
+npx hardhat node
+source .env
 npx hardhat test
 REPORT_GAS=true npx hardhat test
-npx hardhat node
 npx hardhat ignition deploy ./ignition/modules/Lock.ts
 ```
 
@@ -16,9 +17,10 @@ npx hardhat ignition deploy ./ignition/modules/Lock.ts
 
 ENV List:
 
+- TESTNET_PRIVATE_KEY
+- MAINNET_PRIVATE_KEY
 - INFURA_API_KEY
-- SEPOLIA_PRIVATE_KEY
-- ETHERSCAN_API_KEY
+- SCAN_API_KEY
 
 CMD:
 

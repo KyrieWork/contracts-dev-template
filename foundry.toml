@@ -1,7 +1,7 @@
 [profile.default]
 src = 'contracts'
-out = 'out'
+out = 'out/foundry'
 libs = ['lib']
 test = 'test'
-cache_path  = 'cache_forge'
+cache_path  = 'cache/foundry'
 gas_reports = ["*"]

@@ -1,4 +1,4 @@
-import hre from "hardhat";
+import hre from 'hardhat';
 
 export const Wallets = async () => {
   const accounts = await hre.ethers.getSigners();

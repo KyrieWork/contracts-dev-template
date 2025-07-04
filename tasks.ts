@@ -1,8 +1,8 @@
-import { task } from "hardhat/config";
-import { Contract } from "ethers";
+import { task } from 'hardhat/config';
+import { Contract } from 'ethers';
 
 // cmd: npx hardhat task:accounts
-task("task:accounts", "Prints the list of accounts", async (taskArgs, hre) => {
+task('task:accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
   for (const account of accounts) {
@@ -11,61 +11,61 @@ task("task:accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 });
 
 // cmd: npx hardhat task:balance --account 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 --network localhost
-task("task:balance", "Prints an account's balance")
-  .addParam("account", "The account's address")
+task('task:balance', "Prints an account's balance")
+  .addParam('account', "The account's address")
   .setAction(async (taskArgs, hre) => {
     const balance = await hre.ethers.provider.getBalance(taskArgs.account);
 
-    console.log(hre.ethers.formatEther(balance), "ETH");
+    console.log(hre.ethers.formatEther(balance), 'ETH');
   });
 
 // cmd: npx hardhat task:blockNumber --network localhost
-task("task:blockNumber", "Get current network block height").setAction(async (taskArgs, hre) => {
+task('task:blockNumber', 'Get current network block height').setAction(async (taskArgs, hre) => {
   const blockNumber = await hre.ethers.provider.getBlockNumber();
   console.log(`Current block height: ${blockNumber}`);
 });
 
 // cmd: npx hardhat task:verify-contract --contract <contract address> --name <contract name> --network localhost --args <constructor arguments,comma separated>
-task("task:verify-contract", "Verify contract code")
-  .addParam("contract", "Deployed contract address")
-  .addParam("name", "Contract name")
-  .addOptionalParam("args", "Constructor arguments, comma separated", "")
+task('task:verify-contract', 'Verify contract code')
+  .addParam('contract', 'Deployed contract address')
+  .addParam('name', 'Contract name')
+  .addOptionalParam('args', 'Constructor arguments, comma separated', '')
   .setAction(async (taskArgs, hre) => {
     const contractAddress = taskArgs.contract;
     const contractName = taskArgs.name;
     let constructorArgs: any[] = [];
 
     if (taskArgs.args) {
-      constructorArgs = taskArgs.args.split(",");
+      constructorArgs = taskArgs.args.split(',');
     }
 
     console.log(`Verifying contract ${contractName} at address ${contractAddress}`);
 
     try {
-      await hre.run("verify:verify", {
+      await hre.run('verify:verify', {
         address: contractAddress,
         contract: `contracts/${contractName}.sol:${contractName}`,
         constructorArguments: constructorArgs,
       });
-      console.log("Contract verification successful!");
+      console.log('Contract verification successful!');
     } catch (error) {
-      console.error("Contract verification failed:", error);
+      console.error('Contract verification failed:', error);
     }
   });
 
 // cmd: npx hardhat task:deploy-contract --name ERC20Mock --args "a,b" --network localhost
-task("task:deploy-contract", "Deploy smart contract")
-  .addParam("name", "Contract name")
-  .addOptionalParam("args", "Constructor arguments, comma separated", "")
+task('task:deploy-contract', 'Deploy smart contract')
+  .addParam('name', 'Contract name')
+  .addOptionalParam('args', 'Constructor arguments, comma separated', '')
   .setAction(async (taskArgs, hre) => {
-    await hre.run("compile");
+    await hre.run('compile');
 
     const contractName = taskArgs.name;
     const networkName = hre.network.name;
     let constructorArgs: any[] = [];
 
     if (taskArgs.args) {
-      constructorArgs = taskArgs.args.split(",");
+      constructorArgs = taskArgs.args.split(',');
     }
 
     console.log(`Deploying ${contractName} to ${networkName} network`);
@@ -87,9 +87,11 @@ task("task:deploy-contract", "Deploy smart contract")
       console.log(`${contractName} has been deployed to address: ${contractAddress}`);
 
       // Save deployment information
-      const fs = require("fs");
+      const fs = require('fs');
       const deployments = JSON.parse(
-        fs.existsSync("./out/deployments.json") ? fs.readFileSync("./out/deployments.json", "utf8") : "{}"
+        fs.existsSync('./out/deployments.json')
+          ? fs.readFileSync('./out/deployments.json', 'utf8')
+          : '{}'
       );
 
       if (!deployments[networkName]) {
@@ -103,11 +105,11 @@ task("task:deploy-contract", "Deploy smart contract")
         args: constructorArgs,
       };
 
-      if (!fs.existsSync("./out")) {
-        fs.mkdirSync("./out", { recursive: true });
+      if (!fs.existsSync('./out')) {
+        fs.mkdirSync('./out', { recursive: true });
       }
 
-      fs.writeFileSync("./out/deployments.json", JSON.stringify(deployments, null, 2));
+      fs.writeFileSync('./out/deployments.json', JSON.stringify(deployments, null, 2));
 
       console.log(`Deployment information saved to ./out/deployments.json`);
 
@@ -119,11 +121,11 @@ task("task:deploy-contract", "Deploy smart contract")
   });
 
 // cmd: npx hardhat task:read-contract --address 0x5FbDB2315678afecb367f032d93F642f64180aa3 --name ERC20Mock --function balanceOf --args 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --network localhost
-task("task:read-contract", "Call contract's read-only method")
-  .addParam("address", "Contract address")
-  .addParam("name", "Contract name")
-  .addParam("function", "Function name")
-  .addOptionalParam("args", "Function arguments, comma separated", "")
+task('task:read-contract', "Call contract's read-only method")
+  .addParam('address', 'Contract address')
+  .addParam('name', 'Contract name')
+  .addParam('function', 'Function name')
+  .addOptionalParam('args', 'Function arguments, comma separated', '')
   .setAction(async (taskArgs, hre) => {
     const contractAddress = taskArgs.address;
     const contractName = taskArgs.name;
@@ -131,7 +133,7 @@ task("task:read-contract", "Call contract's read-only method")
 
     let functionArgs: any[] = [];
     if (taskArgs.args) {
-      functionArgs = taskArgs.args.split(",");
+      functionArgs = taskArgs.args.split(',');
     }
 
     console.log(`Calling ${contractName}'s ${functionName} function`);
@@ -153,12 +155,12 @@ task("task:read-contract", "Call contract's read-only method")
   });
 
 // cmd: npx hardhat task:write-contract --address 0x5FbDB2315678afecb367f032d93F642f64180aa3  --name ERC20Mock --function mint --args 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,1000000000000000000000000 --value 0 --network localhost
-task("task:write-contract", "Call contract's write method")
-  .addParam("address", "Contract address")
-  .addParam("name", "Contract name")
-  .addParam("function", "Function name")
-  .addOptionalParam("args", "Function arguments, comma separated", "")
-  .addOptionalParam("value", "ETH amount to send with transaction", "0")
+task('task:write-contract', "Call contract's write method")
+  .addParam('address', 'Contract address')
+  .addParam('name', 'Contract name')
+  .addParam('function', 'Function name')
+  .addOptionalParam('args', 'Function arguments, comma separated', '')
+  .addOptionalParam('value', 'ETH amount to send with transaction', '0')
   .setAction(async (taskArgs, hre) => {
     const contractAddress = taskArgs.address;
     const contractName = taskArgs.name;
@@ -167,7 +169,7 @@ task("task:write-contract", "Call contract's write method")
 
     let functionArgs: any[] = [];
     if (taskArgs.args) {
-      functionArgs = taskArgs.args.split(",");
+      functionArgs = taskArgs.args.split(',');
     }
 
     console.log(`Calling ${contractName}'s ${functionName} function with ${taskArgs.value} ETH`);
@@ -185,7 +187,9 @@ task("task:write-contract", "Call contract's write method")
       // Wait for transaction confirmation
       console.log(`Waiting for transaction confirmation...`);
       const receipt = await tx.wait();
-      console.log(`Transaction confirmed, block number: ${receipt.blockNumber}, Gas used: ${receipt.gasUsed}`);
+      console.log(
+        `Transaction confirmed, block number: ${receipt.blockNumber}, Gas used: ${receipt.gasUsed}`
+      );
 
       return receipt;
     } catch (error) {
@@ -195,15 +199,15 @@ task("task:write-contract", "Call contract's write method")
   });
 
 // cmd: npx hardhat task:list-deployments --network localhost
-task("task:list-deployments", "List deployed contracts").setAction(async (taskArgs, hre) => {
-  const fs = require("fs");
+task('task:list-deployments', 'List deployed contracts').setAction(async (taskArgs, hre) => {
+  const fs = require('fs');
 
-  if (!fs.existsSync("./out/deployments.json")) {
-    console.log("No deployment records found");
+  if (!fs.existsSync('./out/deployments.json')) {
+    console.log('No deployment records found');
     return;
   }
 
-  const deployments = JSON.parse(fs.readFileSync("./out/deployments.json", "utf8"));
+  const deployments = JSON.parse(fs.readFileSync('./out/deployments.json', 'utf8'));
 
   if (taskArgs.network) {
     // Show deployments for specific network
@@ -220,7 +224,7 @@ task("task:list-deployments", "List deployed contracts").setAction(async (taskAr
     }
   } else {
     // Show deployments for all networks
-    console.log("Deployments on all networks:");
+    console.log('Deployments on all networks:');
     for (const [network, contracts] of Object.entries(deployments)) {
       console.log(`\n${network} network:`);
       for (const [contractName, info] of Object.entries(contracts as any)) {
@@ -231,9 +235,9 @@ task("task:list-deployments", "List deployed contracts").setAction(async (taskAr
 });
 
 // cmd: npx hardhat task:transfer --to 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 --amount 1.23456789 --network localhost
-task("task:transfer", "Send native tokens (ETH/MATIC etc.)")
-  .addParam("to", "Recipient address")
-  .addParam("amount", "Amount to send")
+task('task:transfer', 'Send native tokens (ETH/MATIC etc.)')
+  .addParam('to', 'Recipient address')
+  .addParam('amount', 'Amount to send')
   .setAction(async (taskArgs, hre) => {
     const toAddress = taskArgs.to;
     const amount = hre.ethers.parseEther(taskArgs.amount);
@@ -279,10 +283,10 @@ task("task:transfer", "Send native tokens (ETH/MATIC etc.)")
   });
 
 // cmd: npx hardhat task:impersonate --address 0x0000000000000000000000000000000000000123 --network localhost
-task("task:impersonate", "Impersonate specified address")
-  .addParam("address", "Address to impersonate")
+task('task:impersonate', 'Impersonate specified address')
+  .addParam('address', 'Address to impersonate')
   .setAction(async (taskArgs, hre) => {
-    if (!["hardhat", "localhost"].includes(hre.network.name)) {
+    if (!['hardhat', 'localhost'].includes(hre.network.name)) {
       console.error(`This task can only be run on local networks (hardhat or localhost)`);
       return;
     }
@@ -294,7 +298,7 @@ task("task:impersonate", "Impersonate specified address")
 
       // Make target address have enough ETH
       await hre.network.provider.request({
-        method: "hardhat_impersonateAccount",
+        method: 'hardhat_impersonateAccount',
         params: [targetAddress],
       });
 
@@ -302,7 +306,7 @@ task("task:impersonate", "Impersonate specified address")
       const [signer] = await hre.ethers.getSigners();
       await signer.sendTransaction({
         to: targetAddress,
-        value: hre.ethers.parseEther("10"),
+        value: hre.ethers.parseEther('10'),
       });
 
       console.log(`Address ${targetAddress} has been impersonated and received 10 ETH`);
@@ -321,19 +325,19 @@ task("task:impersonate", "Impersonate specified address")
   });
 
 // cmd: npx hardhat task:erc20-balance --token 0x5FbDB2315678afecb367f032d93F642f64180aa3 --account 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --network localhost
-task("task:erc20-balance", "Query ERC20 token balance")
-  .addParam("token", "Token contract address")
-  .addParam("account", "Account address")
+task('task:erc20-balance', 'Query ERC20 token balance')
+  .addParam('token', 'Token contract address')
+  .addParam('account', 'Account address')
   .setAction(async (taskArgs, hre) => {
     const tokenAddress = taskArgs.token;
     const accountAddress = taskArgs.account;
 
     // ERC20 token ABI
     const erc20Abi = [
-      "function name() view returns (string)",
-      "function symbol() view returns (string)",
-      "function decimals() view returns (uint8)",
-      "function balanceOf(address owner) view returns (uint256)",
+      'function name() view returns (string)',
+      'function symbol() view returns (string)',
+      'function decimals() view returns (uint8)',
+      'function balanceOf(address owner) view returns (uint256)',
     ];
 
     try {

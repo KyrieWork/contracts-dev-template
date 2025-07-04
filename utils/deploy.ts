@@ -1,4 +1,4 @@
-import hre from "hardhat";
+import hre from 'hardhat';
 
 type ContractItem = {
   address: string;
@@ -6,7 +6,7 @@ type ContractItem = {
 };
 
 export const MockToken = async (name: string, symbol: string) => {
-  const MockToken = await hre.ethers.getContractFactory("ERC20Mock");
+  const MockToken = await hre.ethers.getContractFactory('ERC20Mock');
   const token = await MockToken.deploy(name, symbol);
   const tokenAddress = await token.getAddress();
   return { address: tokenAddress, contract: token } as ContractItem;

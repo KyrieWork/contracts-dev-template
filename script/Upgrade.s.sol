@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.25;
 
-import { Script, console } from "forge-std/Script.sol";
-import { Lock } from "../contracts/Lock.sol";
+import { Script, console } from 'forge-std/Script.sol';
+import { Lock } from '../contracts/Lock.sol';
 
 /* 
 ERC1967Proxy upgradeToAndCall
@@ -17,14 +17,14 @@ contract UpgradeScript is Script {
     address public target = address(0x0);
 
     function run() external {
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        uint256 deployerPrivateKey = vm.envUint('PRIVATE_KEY');
         vm.startBroadcast(deployerPrivateKey);
 
-        bytes memory upgradeData = abi.encodeWithSignature("upgradeToAndCall(address,bytes)", address(new Lock(0)), "");
+        bytes memory upgradeData = abi.encodeWithSignature('upgradeToAndCall(address,bytes)', address(new Lock(0)), '');
         (bool s, ) = address(target).call(upgradeData);
-        require(s, "upgrade target failed");
+        require(s, 'upgrade target failed');
 
-        console.log("Upgrade success!");
+        console.log('Upgrade success!');
         vm.stopBroadcast();
     }
 }
